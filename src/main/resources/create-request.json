@@ -1,0 +1,71 @@
+{
+  "type": "PostgreSQL",
+  "tables": [
+    {
+      "name": "Order",
+      "columns": [
+        {
+          "name": "id",
+          "type": "UUID",
+          "required": true,
+          "primary": true
+        },
+        {
+          "name": "customer_id",
+          "type": "UUID",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "amount",
+          "type": "integer",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "columns": [
+        {
+          "name": "id",
+          "type": "UUID",
+          "required": true,
+          "primary": true
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR",
+          "required": true
+        },
+        {
+          "name": "inn",
+          "type": "varchar",
+          "required": true
+        },
+        {
+          "name": "address",
+          "type": "varchar",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "foreignKeys": [
+    {
+      "table": "order",
+      "name": "fk_order_customer_id",
+      "column": "customer_id",
+      "reference": "customer(id)"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_order_customer_id",
+      "reference": "order(customer_id)"
+    }
+  ]
+}
