@@ -1,6 +1,5 @@
-package com.algon.j2db.controller;
+package com.algon.j2db.contract.dto;
 
-import com.algon.j2db.contract.BaseRequest;
 import com.algon.j2db.dto.ForeignKey;
 import com.algon.j2db.dto.Index;
 import com.algon.j2db.dto.Table;

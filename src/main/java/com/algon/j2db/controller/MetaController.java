@@ -2,20 +2,21 @@ package com.algon.j2db.controller;
 
 import com.algon.j2db.contract.BaseRequest;
 import com.algon.j2db.contract.BaseResponse;
-import com.algon.j2db.contract.DeleteRequest;
-import com.algon.j2db.contract.DeleteResponse;
-import com.algon.j2db.contract.GenerateRequest;
-import com.algon.j2db.contract.GenerateResponse;
-import com.algon.j2db.contract.GetListRequest;
-import com.algon.j2db.contract.GetListResponse;
-import com.algon.j2db.contract.UploadRequest;
-import com.algon.j2db.contract.UploadResponse;
+import com.algon.j2db.contract.dto.DeleteRequestDto;
+import com.algon.j2db.contract.dto.DeleteResponseDto;
+import com.algon.j2db.contract.dto.GenerateRequestDto;
+import com.algon.j2db.contract.dto.GenerateResponseDto;
+import com.algon.j2db.contract.dto.GetListRequestDto;
+import com.algon.j2db.contract.dto.GetListResponseDto;
+import com.algon.j2db.contract.dto.UploadRequestDto;
+import com.algon.j2db.contract.dto.UploadResponseDto;
+import com.algon.j2db.contract.dto.CreateRequestDto;
+import com.algon.j2db.contract.dto.CreateResponseDto;
 import com.algon.j2db.service.J2DBMetaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class CrudController {
+public class MetaController {
 
     private final J2DBMetaService j2DBMetaService;
 
@@ -45,36 +46,28 @@ public class CrudController {
     }
 
     @DeleteMapping("/database/{id}")
-    public ResponseEntity<DeleteResponse> delete(@RequestBody DeleteRequest request) {
-        DeleteResponse response = new DeleteResponse();
+    public ResponseEntity<DeleteResponseDto> delete(@RequestBody BaseRequest<DeleteRequestDto> request) {
+        DeleteResponseDto response = new DeleteResponseDto();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/database")
-    public ResponseEntity<GetListResponse> getList(@RequestBody GetListRequest request) {
-        GetListResponse response = new GetListResponse();
+    public ResponseEntity<GetListResponseDto> getList(@RequestBody BaseRequest<GetListRequestDto> request) {
+        GetListResponseDto response = new GetListResponseDto();
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/generation/database/{id}")
-    public ResponseEntity<GenerateResponse> generate(
-            @RequestParam("id") UUID id,
-            @RequestBody GenerateRequest request) {
-        GenerateResponse response = new GenerateResponse();
+    public ResponseEntity<GenerateResponseDto> generate(@RequestParam("id") UUID id,
+            @RequestBody BaseRequest<GenerateRequestDto> request) {
+        GenerateResponseDto response = new GenerateResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/upload/database/{id}")
-    public ResponseEntity<UploadResponse> populate(
-            @RequestParam("id") UUID id,
-            @RequestBody UploadRequest request) {
-        UploadResponse response = new UploadResponse();
+    public ResponseEntity<UploadResponseDto> populate(@RequestParam("id") UUID id,
+            @RequestBody BaseRequest<UploadRequestDto> request) {
+        UploadResponseDto response = new UploadResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    @PostMapping("ping")
-    public String ping(@RequestBody CreateRequestDto request) {
-        System.out.println(request);
-        return "pong";
     }
 }

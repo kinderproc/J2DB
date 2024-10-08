@@ -7,6 +7,8 @@ import java.util.List;
 @Data
 public class Table {
 
+    private String schema;
+
     private String name;
 
     private List<Column> columns;

@@ -1,4 +1,4 @@
-package com.algon.j2db.controller;
+package com.algon.j2db.contract.dto;
 
 import lombok.Getter;
 import lombok.Setter;

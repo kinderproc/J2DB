@@ -1,8 +1,8 @@
 package com.algon.j2db.repository;
 
-import com.algon.j2db.common.UserDbDataManager;
 import com.algon.j2db.contract.BaseRequest;
-import com.algon.j2db.controller.CreateRequestDto;
+import com.algon.j2db.contract.dto.CreateRequestDto;
+import com.algon.j2db.utils.DbProps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,8 +16,6 @@ import java.util.UUID;
 @Slf4j
 public class J2DBMetaRepoPostgres implements J2DBMetaRepo {
 
-    private final UserDbDataManager userDbDataManager;
-
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -26,7 +24,7 @@ public class J2DBMetaRepoPostgres implements J2DBMetaRepo {
         UUID id = UUID.randomUUID();
         jdbcTemplate.update("CREATE DATABASE " + dbName);
         jdbcTemplate.update("INSERT INTO application.db_instance VALUES(?, ?, ?, ?)", id, dbName,
-                userDbDataManager.getUserDbUrl(dbName), new Date());
+                DbProps.userDbUrl(dbName), new Date());
         return id;
     }
 

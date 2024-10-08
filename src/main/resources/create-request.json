@@ -1,71 +1,82 @@
 {
-  "type": "PostgreSQL",
-  "tables": [
-    {
-      "name": "Order",
-      "columns": [
-        {
-          "name": "id",
-          "type": "UUID",
-          "required": true,
-          "primary": true
-        },
-        {
-          "name": "customer_id",
-          "type": "UUID",
-          "required": true
-        },
-        {
-          "name": "quantity",
-          "type": "integer",
-          "required": true
-        },
-        {
-          "name": "amount",
-          "type": "integer",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "Customer",
-      "columns": [
-        {
-          "name": "id",
-          "type": "UUID",
-          "required": true,
-          "primary": true
-        },
-        {
-          "name": "name",
-          "type": "VARCHAR",
-          "required": true
-        },
-        {
-          "name": "inn",
-          "type": "varchar",
-          "required": true
-        },
-        {
-          "name": "address",
-          "type": "varchar",
-          "required": true
-        }
-      ]
-    }
-  ],
-  "foreignKeys": [
-    {
-      "table": "order",
-      "name": "fk_order_customer_id",
-      "column": "customer_id",
-      "reference": "customer(id)"
-    }
-  ],
-  "indexes": [
-    {
-      "name": "idx_order_customer_id",
-      "reference": "order(customer_id)"
-    }
-  ]
+  "requestId": "84141817-f74b-45be-9bce-47b5ad9676ee",
+  "data": {
+    "type": "PostgreSQL",
+    "name": "books",
+    "tables": [
+      {
+        "schema": "accounting",
+        "name": "order",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "required": true,
+            "primary": true
+          },
+          {
+            "name": "customer_id",
+            "type": "UUID",
+            "required": true,
+            "primary": false
+          },
+          {
+            "name": "quantity",
+            "type": "integer",
+            "required": true,
+            "primary": false
+          },
+          {
+            "name": "amount",
+            "type": "integer",
+            "required": true,
+            "primary": false
+          }
+        ]
+      },
+      {
+        "schema": "accounting",
+        "columns": [
+          {
+            "name": "id",
+            "type": "UUID",
+            "required": true,
+            "primary": true
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR",
+            "required": true,
+            "primary": false
+          },
+          {
+            "name": "inn",
+            "type": "varchar",
+            "required": true,
+            "primary": false
+          },
+          {
+            "name": "address",
+            "type": "varchar",
+            "required": true,
+            "primary": false
+          }
+        ]
+      }
+    ],
+    "foreignKeys": [
+      {
+        "table": "order",
+        "name": "fk_order_customer_id",
+        "column": "customer_id",
+        "reference": "customer(id)"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "idx_order_customer_id",
+        "reference": "order(customer_id)"
+      }
+    ]
+  }
 }

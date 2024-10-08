@@ -1,14 +1,10 @@
 package com.algon.service;
 
-import com.algon.j2db.contract.BaseRequest;
-import com.algon.j2db.controller.CreateRequestDto;
 import com.algon.j2db.service.J2DBMetaService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class J2DBMetaServiceTest {
