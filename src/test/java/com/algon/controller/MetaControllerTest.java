@@ -46,7 +46,7 @@ class MetaControllerTest {
         when(j2DBMetaService.create(any())).thenReturn(UUID.randomUUID());
         mvc.perform(MockMvcRequestBuilders.post("/api/v1/database")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Resource.asStr("create-request.json"))
+                .content(Resource.asStr("data/create-request.json"))
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("Database successfully created"))
@@ -59,7 +59,7 @@ class MetaControllerTest {
         when(j2DBMetaService.create(any())).thenThrow(new RequestException(UUID.randomUUID(), errorMessage));
         mvc.perform(MockMvcRequestBuilders.post("/api/v1/database")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Resource.asStr("create-request.json"))
+                        .content(Resource.asStr("data/create-request.json"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("$.message").value(errorMessage));
