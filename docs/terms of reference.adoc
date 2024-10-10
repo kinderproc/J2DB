@@ -89,12 +89,6 @@ J2DB is a service for generating a PostgreSQL, MySQL, or MongoDb database based 
 ----
 
 == Remarks:
-- В таблице обязательно должен быть первичный ключ
-- Метод POST POST /database добавляет в таблицу DATABASE запись для созданной базы, со статусом CREATED
-- Методы POST POST /data/generation/database/{id} и /data/populate/database/{id} могут работать только с базой в статусе CREATED, иначе возвращают ошибку. После окончания работые переводит базу в статус POPULATED
-- При генерации данных, значения для внешних ключей выбираются случайно из списка допустимых значений
-- Порядок создания таблиц основывается на внешних ключах
-- Сервисы валидации не имеют публичного API. Работают с асинхронными запросами из других сервисов.
 
 - The table must contain a primary key
 - The POST /database method adds a record to the DATABASE table for the created database, with the CREATED status
