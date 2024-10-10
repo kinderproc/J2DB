@@ -1,36 +1,37 @@
-= Краткое описание функционала
+= Brief description of the functionality
 
-J2DB - сервис для генерации базы данных PostgreSQL, MySQL или MongoDb на основе JSON. Сервис также поддерживает загрузку данных в csv-формате. Взаимодействие с сервисом происходит через API. На вход подается JSON, со структурой данных, на выходе пользователь получает настройки для подключения к базе с соответствующей структурой и сгенерированными данными.
+J2DB is a service for generating a PostgreSQL, MySQL, or MongoDb database based on JSON. The service also supports uploading data in csv format. Interaction with the service takes place through the API. The input is JSON, with a data structure, and at the output, the user receives settings for connecting to the database with the appropriate structure and generated data.
 
-=== API должен предоставлять следующие методы:
+=== The API must expose the following methods:
 
-- POST /database - создает на сервере базу с указанной схемой, в ответе приходит ID базы
-- DELETE /database/{id} - удаляет базу
-- GET /database - возвращает список баз на сервере
-- POST /generation/database/{id}- заполняет базу случайными данными
-- POST /populate/database/{id} - загружает данные в формате csv
+- POST /database - creates a database with the specified scheme on the server, the database ID is sent in the response
+- DELETE /database/{id} - deletes the database
+- GET /database - returns a list of databases on the server
+- POST /generation/database/{id}- populates the database with random data
+- POST /populate/database/{id} - loads data in csv format
 
 
-=== Входящий JSON должен соответсвовать одной из следующих структур:
-- Для PostgreSQL и MySQL
+=== The incoming JSON must match one of the following structures:
+
+- For PostgreSQL and MySQL
 ----
         {
         	"type": <string> PostgreSQL/MySQL
-        	"name": <string> имя базы
+        	"name": <string> database name
         	"tables": [
         		{
-        			"schema": <string> имя схемы
-        			"name": <string> имя таблицы
+        			"schema": <string> schema name
+        			"name": <string> table name
         			"columns": [
         				{ 
-        					"name": <string> имя колонки,
-        					"type": <string> строка c типом PostgreSQL,
+        					"name": <string> column name,
+        					"type": <string> string of PostgreSQL type,
         					"not_null": <boolean>,
         					"primary_key": <boolean>,
-        					"rule": <string> не обязательное поле, либо:
-        						1. ${dictionary."<имя_словаря_данных>"}
-        						2. ${pattern."<регулярное_выражение>"}
-        						3. ${constant."<значение>"}
+        					"rule": <string> not required or:
+        						1. ${dictionary."<dictionary_name>"}
+        						2. ${pattern."<regular_expression>"}
+        						3. ${constant."<value>"}
         				},
         				...
         			]
@@ -38,42 +39,42 @@ J2DB - сервис для генерации базы данных PostgreSQL, MySQL или MongoDb на основе 
         	],
         	"foreign_keys": [
         		{
-        			"table": <string> имя таблицы, содержащей ключ
-        			"name": <string> имя ключа,
-        			"column": <string> имя колонки с ключом
-        			"references": <string> ссылка в формате <имя_таблицы>(<имя_колонки>)
+        			"table": <string> name of table with key
+        			"name": <string> key name,
+        			"column": <string> name of column with key
+        			"references": <string> referency at <table_name>(<column_name>) format
         		},
         		...
         	],
         	"indexes": [
         		{
-        			"name": <string> имя индекса,
-        			"references": <string> ссылка в формате <имя_таблицы>(<имя_колонки>)
+        			"name": <string> index name,
+        			"references": <string> reference in <table_name>(<column_name>) format
         		}
         	],
         	"dictionaries": [
-        		"name": <string> имя словаря данных,
-        		"values": <array> набор значений, соответствующего типа
+        		"name": <string> dictionary name,
+        		"values": <array> list of values of corresponding type
         	]
         }
 ----
 
 
-- Для MongoDb
+- For MongoDb
 ----
         {
         	"type": <string> MongoDb
         	"collections": [
         		{
-        			"name": <string> имя коллекции,
+        			"name": <string> name of collection,
         			"documents": [
         				{	
-        					"name": <string> имя поля,
-        					"type": <string> тип поля,
-        					"rule": <string> не обязательное поле, либо:
-        						1. ${dictionary."<имя_словаря_данных>"}
-        						2. ${pattern."<регулярное_выражение>"}
-        						3. ${constant."<значение>"}
+        					"name": <string> field name,
+        					"type": <string> field type,
+        					"rule": <string> not required or:
+        						1. ${dictionary."<dictionary_name>"}
+        						2. ${pattern."<regular_expression>"}
+        						3. ${constant."<value>"}
         				},
         				...
         			]
@@ -81,16 +82,21 @@ J2DB - сервис для генерации базы данных PostgreSQL, MySQL или MongoDb на основе 
         		...
         	],
         	"dictionaries": [
-        		"name": <string> имя словаря данных,
-        		"values": <array> набор обьектов, либо типовых значений
+        		"name": <string> dictionary name,
+        		"values": <array> list of values
         	]
         }
 ----
 
-== Замечания:
-- В таблице обязательно должен быть первичный ключ
-- Метод POST POST /database добавляет в таблицу DATABASE запись для созданной базы, со статусом CREATED
-- Методы POST POST /data/generation/database/{id} и /data/populate/database/{id} могут работать только с базой в статусе CREATED, иначе возвращают ошибку. После окончания работые переводит базу в статус POPULATED
-- При генерации данных, значения для внешних ключей выбираются случайно из списка допустимых значений
-- Порядок создания таблиц основывается на внешних ключах
-- Сервисы валидации не имеют публичного API. Работают с асинхронными запросами из других сервисов.
+== Remarks:
+- Р’ С‚Р°Р±Р»РёС†Рµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРµСЂРІРёС‡РЅС‹Р№ РєР»СЋС‡
+- РњРµС‚РѕРґ POST POST /database РґРѕР±Р°РІР»СЏРµС‚ РІ С‚Р°Р±Р»РёС†Сѓ DATABASE Р·Р°РїРёСЃСЊ РґР»СЏ СЃРѕР·РґР°РЅРЅРѕР№ Р±Р°Р·С‹, СЃРѕ СЃС‚Р°С‚СѓСЃРѕРј CREATED
+- РњРµС‚РѕРґС‹ POST POST /data/generation/database/{id} Рё /data/populate/database/{id} РјРѕРіСѓС‚ СЂР°Р±РѕС‚Р°С‚СЊ С‚РѕР»СЊРєРѕ СЃ Р±Р°Р·РѕР№ РІ СЃС‚Р°С‚СѓСЃРµ CREATED, РёРЅР°С‡Рµ РІРѕР·РІСЂР°С‰Р°СЋС‚ РѕС€РёР±РєСѓ. РџРѕСЃР»Рµ РѕРєРѕРЅС‡Р°РЅРёСЏ СЂР°Р±РѕС‚С‹Рµ РїРµСЂРµРІРѕРґРёС‚ Р±Р°Р·Сѓ РІ СЃС‚Р°С‚СѓСЃ POPULATED
+- РџСЂРё РіРµРЅРµСЂР°С†РёРё РґР°РЅРЅС‹С…, Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ РІРЅРµС€РЅРёС… РєР»СЋС‡РµР№ РІС‹Р±РёСЂР°СЋС‚СЃСЏ СЃР»СѓС‡Р°Р№РЅРѕ РёР· СЃРїРёСЃРєР° РґРѕРїСѓСЃС‚РёРјС‹С… Р·РЅР°С‡РµРЅРёР№
+- РџРѕСЂСЏРґРѕРє СЃРѕР·РґР°РЅРёСЏ С‚Р°Р±Р»РёС† РѕСЃРЅРѕРІС‹РІР°РµС‚СЃСЏ РЅР° РІРЅРµС€РЅРёС… РєР»СЋС‡Р°С…
+- РЎРµСЂРІРёСЃС‹ РІР°Р»РёРґР°С†РёРё РЅРµ РёРјРµСЋС‚ РїСѓР±Р»РёС‡РЅРѕРіРѕ API. Р Р°Р±РѕС‚Р°СЋС‚ СЃ Р°СЃРёРЅС…СЂРѕРЅРЅС‹РјРё Р·Р°РїСЂРѕСЃР°РјРё РёР· РґСЂСѓРіРёС… СЃРµСЂРІРёСЃРѕРІ.
+
+- The table must contain a primary key
+- The POST /database method adds a record to the DATABASE table for the created database, with the CREATED status
+- The POST methods /data/generation/database/{id} and /data/populate/database/{id} can only work with the database in the CREATED status, otherwise they return an error. After the work is completed, the database is transferred to the POPULATED status
+- When generating data, the values for foreign keys are randomly selected from the list of valid values
