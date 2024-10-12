@@ -25,8 +25,8 @@ public class J2DBMetaService {
             schemaCreationService.createTables(request.getData());
             return dbUuid;
         } catch (Exception e) {
-            log.error("J2DBMetaRepoPostgres.getUrl exception: {}", e.getMessage(), e);
-            throw new RequestException(request.getRequestId(), "J2DBMetaRepoPostgres.getUrl exception: " + e.getMessage());
+            log.error("J2DBMetaRepoPostgres.create exception: {}", e.getMessage(), e);
+            throw new RequestException(request.getRequestId(), "J2DBMetaRepoPostgres.create exception: " + e.getMessage());
         }
     }
 
