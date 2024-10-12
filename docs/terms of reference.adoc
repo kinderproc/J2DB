@@ -1,0 +1,96 @@
+= Brief description of the functionality
+
+J2DB is a service for generating a PostgreSQL, MySQL, or MongoDb database based on JSON. The service also supports uploading data in csv format. Interaction with the service takes place through the API. The input is JSON, with a data structure, and at the output, the user receives settings for connecting to the database with the appropriate structure and generated data.
+
+=== The API must expose the following methods:
+
+- POST /database - creates a database with the specified scheme on the server, the database ID is sent in the response
+- DELETE /database/{id} - deletes the database
+- GET /database - returns a list of databases on the server
+- POST /generation/database/{id}- populates the database with random data
+- POST /populate/database/{id} - loads data in csv format
+
+
+=== The incoming JSON must match one of the following structures:
+
+- For PostgreSQL and MySQL
+----
+        {
+        	"type": <string> PostgreSQL/MySQL
+        	"name": <string> database name
+        	"tables": [
+        		{
+        			"schema": <string> schema name
+        			"name": <string> table name
+        			"columns": [
+        				{ 
+        					"name": <string> column name,
+        					"type": <string> string of PostgreSQL type,
+        					"not_null": <boolean>,
+        					"primary_key": <boolean>,
+        					"rule": <string> not required or:
+        						1. ${dictionary."<dictionary_name>"}
+        						2. ${pattern."<regular_expression>"}
+        						3. ${constant."<value>"}
+        				},
+        				...
+        			]
+        		}
+        	],
+        	"foreign_keys": [
+        		{
+        			"table": <string> name of table with key
+        			"name": <string> key name,
+        			"column": <string> name of column with key
+        			"references": <string> referency at <table_name>(<column_name>) format
+        		},
+        		...
+        	],
+        	"indexes": [
+        		{
+        			"name": <string> index name,
+        			"references": <string> reference in <table_name>(<column_name>) format
+        		}
+        	],
+        	"dictionaries": [
+        		"name": <string> dictionary name,
+        		"values": <array> list of values of corresponding type
+        	]
+        }
+----
+
+
+- For MongoDb
+----
+        {
+        	"type": <string> MongoDb
+        	"collections": [
+        		{
+        			"name": <string> name of collection,
+        			"documents": [
+        				{	
+        					"name": <string> field name,
+        					"type": <string> field type,
+        					"rule": <string> not required or:
+        						1. ${dictionary."<dictionary_name>"}
+        						2. ${pattern."<regular_expression>"}
+        						3. ${constant."<value>"}
+        				},
+        				...
+        			]
+        		}
+        		...
+        	],
+        	"dictionaries": [
+        		"name": <string> dictionary name,
+        		"values": <array> list of values
+        	]
+        }
+----
+
+== Remarks:
+
+- The table must contain a primary key
+- The POST /database method adds a record to the DATABASE table for the created database, with the CREATED status
+- The POST methods /data/generation/database/{id} and /data/populate/database/{id} can only work with the database in the CREATED status, otherwise they return an error. After the work is completed, the database is transferred to the POPULATED status
+- When generating data, the values for foreign keys are randomly selected from the list of valid values
