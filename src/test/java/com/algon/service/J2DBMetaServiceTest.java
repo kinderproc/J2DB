@@ -9,8 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class J2DBMetaServiceTest {
 
-
-
     @InjectMocks
     J2DBMetaService j2DBMetaService;
 
