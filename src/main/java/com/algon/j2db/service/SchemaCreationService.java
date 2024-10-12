@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 public class SchemaCreationService {
 
     public void createTables(CreateRequestDto createRequestDto) {
-        final JdbcTemplate jdbcTemplate = new JdbcTemplate(createDataSource(DbProps.userDbUrl(createRequestDto.getName()),
-                EnvProps.metaUser(), EnvProps.metaPassword()));
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(
+                createDataSource(DbProps.userDbUrl(createRequestDto.getName()),
+                EnvProps.metaUser(),
+                EnvProps.metaPassword()));
 
         createRequestDto.getTables().stream()
             .map(Table::getSchema)
